@@ -4,10 +4,52 @@
 	A script viewer that is basically a notepad
 ]]
 
+-- Decompiler implementation (replacing env.decompile)
+assert(getscriptbytecode, "Exploit not supported.")
+
+local API: string = "http://api.plusgiant5.com"
+
+local last_call = 0
+local function call(konstantType: string, scriptPath)
+    local success: boolean, bytecode: string = pcall(getscriptbytecode, scriptPath)
+
+    if (not success) then
+        return `-- Failed to get script bytecode, error:\n\n--[[\n{bytecode}\n--]]`
+    end
+
+    local time_elapsed = os.clock() - last_call
+    if time_elapsed <= .5 then
+        task.wait(.5 - time_elapsed)
+    end
+    local httpResult = request({
+        Url = API .. konstantType,
+        Body = bytecode,
+        Method = "POST",
+        Headers = {
+            ["Content-Type"] = "text/plain"
+        },
+    })
+    last_call = os.clock()
+    
+    if (httpResult.StatusCode ~= 200) then
+        return `-- Error occured while requesting the API, error:\n\n--[[\n{httpResult.Body}\n--]]`
+    else
+        return httpResult.Body
+    end
+end
+
+local function decompile(scriptPath)
+    return call("/konstant/decompile", scriptPath)
+end
+
+local function disassemble(scriptPath)
+    return call("/konstant/disassemble", scriptPath)
+end
+
 -- Common Locals
 local Main,Lib,Apps,Settings -- Main Containers
 local Explorer, Properties, ScriptViewer, Notebook -- Major Apps
-local API,RMD,env,service,plr,create,createSimple -- Main Locals
+local env,service,plr,create,createSimple -- Main Locals
 
 local function initDeps(data)
 	Main = data.Main
@@ -37,7 +79,7 @@ local function main()
 	local PreviousScr = nil
 	
 	ScriptViewer.ViewScript = function(scr)
-		local success, source, time = pcall(env.decompile or function() end, scr)
+		local success, source, time = pcall(decompile, scr)
 		if not success or not source then source, PreviousScr = "-- DEX - Source failed to decompile", nil else PreviousScr = scr end
 		if time then source = "-- Decompiler in: " .. tostring(time) .. "s\n" .. source end
 		codeFrame:SetText(source:gsub("\0", "\\0"))

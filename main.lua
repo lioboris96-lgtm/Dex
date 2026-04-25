@@ -138,7 +138,7 @@ Main = (function()
 	Main.AppControls = {}
 	Main.Apps = Apps
 	Main.MenuApps = {}
-	Main.GitName = "BOXLEGENDARY"
+	Main.GitName = "lioboris96-lgtm"
 	Main.RepoName ="Dex"
 	Main.GitRepoName = Main.GitName.."/"..Main.RepoName
 	
@@ -326,7 +326,7 @@ Main = (function()
 		env.movefileas = movefileas
 		env.saveinstance = (function()
 			local Params = {
-				RepoURL = "https://raw.githubusercontent.com/BOXLEGENDARY/UniversalSynSaveInstance/main/",
+				RepoURL = "https://raw.githubusercontent.com/lioboris96-lgtm/UniversalSynSaveInstance/main/",
 				SSI = "saveinstance",
 			}
 			local synsaveinstance = loadstring(oldgame:HttpGet(Params.RepoURL .. Params.SSI .. ".luau", true), Params.SSI)()
@@ -804,7 +804,7 @@ Main = (function()
 	end
 
 	Main.LoadAdvancedLuauDecompiler = function()
-	    loadstring(game:HttpGet("https://raw.githubusercontent.com/BOXLEGENDARY/Advanced-Luau-Decompiler/main/init.lua", true))()
+	    loadstring(game:HttpGet("https://raw.githubusercontent.com/lioboris96-lgtm/Advanced-Luau-Decompiler/main/init.lua", true))()
 	end
 
 	Main.ShowGui = Main.SecureGui

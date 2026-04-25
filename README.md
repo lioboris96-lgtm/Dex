@@ -1,6 +1,6 @@
 ## Loadstring ( Mobile/Pc )
 ```lua
-loadstring(game:HttpGet("https://github.com/BOXLEGENDARY/Dex/releases/latest/download/out.lua"))()
+loadstring(game:HttpGet("https://github.com/lioboris96-lgtm/Dex/releases/latest/download/out.lua"))()
 ```
 
 ---
@@ -37,10 +37,10 @@ loadstring(game:HttpGet("https://github.com/BOXLEGENDARY/Dex/releases/latest/dow
 
 ## Third Party Components
 
-[Advanced-Luau-Decompiler](https://github.com/BOXLEGENDARY/Advanced-Luau-Decompiler)
+[Advanced-Luau-Decompiler](https://github.com/lioboris96-lgtm/Advanced-Luau-Decompiler)
 
-[UniversalSynapseSaveInstance](https://github.com/BOXLEGENDARY/UniversalSynSaveInstance)
+[UniversalSynapseSaveInstance](https://github.com/lioboris96-lgtm/UniversalSynSaveInstance)
 
-[Shiny](https://github.com/BOXLEGENDARY/shiny)
+[Shiny](https://github.com/lioboris96-lgtm/shiny)
 
 ---

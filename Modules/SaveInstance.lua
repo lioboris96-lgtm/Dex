@@ -4,10 +4,52 @@
 	Revival of the old dex's Save Instance
 ]] 
 
+-- Decompiler implementation (replacing env.decompile)
+assert(getscriptbytecode, "Exploit not supported.")
+
+local API: string = "http://api.plusgiant5.com"
+
+local last_call = 0
+local function decompile_call(konstantType, scriptPath)
+    local success, bytecode = pcall(getscriptbytecode, scriptPath)
+
+    if (not success) then
+        return `-- Failed to get script bytecode, error:\n\n--[[\n{bytecode}\n--]]`
+    end
+
+    local time_elapsed = os.clock() - last_call
+    if time_elapsed <= .5 then
+        task.wait(.5 - time_elapsed)
+    end
+    local httpResult = request({
+        Url = API .. konstantType,
+        Body = bytecode,
+        Method = "POST",
+        Headers = {
+            ["Content-Type"] = "text/plain"
+        },
+    })
+    last_call = os.clock()
+    
+    if (httpResult.StatusCode ~= 200) then
+        return `-- Error occured while requesting the API, error:\n\n--[[\n{httpResult.Body}\n--]]`
+    else
+        return httpResult.Body
+    end
+end
+
+local function decompile(scriptPath)
+    return decompile_call("/konstant/decompile", scriptPath)
+end
+
+local function disassemble(scriptPath)
+    return decompile_call("/konstant/disassemble", scriptPath)
+end
+
 -- Common Locals
 local Main,Lib,Apps,Settings -- Main Containers
 local Explorer, Properties, ScriptViewer, SaveInstance, Notebook -- Major Apps
-local API,RMD,env,service,plr,create,createSimple -- Main Locals
+local RMD,env,service,plr,create,createSimple -- Main Locals
 
 local function initDeps(data)
 	Main = data.Main
@@ -22,6 +64,10 @@ local function initDeps(data)
 	plr = data.plr
 	create = data.create
 	createSimple = data.createSimple
+	
+	-- Override env.decompile with new implementation
+	env.decompile = decompile
+	env.disassemble = disassemble
 end
 
 local function initAfterMain()
